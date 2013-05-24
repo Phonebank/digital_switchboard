@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 from twilio.rest import TwilioRestClient
 
 app = Flask(__name__)
@@ -12,3 +12,9 @@ twilio = TwilioRestClient()
 
 from digitalswitchboard.views import *
 app.register_blueprint(call.mod, url_prefix='/call')
+
+# Static files (temporary)
+
+@app.route('/static/<path:filename>')
+def static(filename):
+    return send_from_directory('/static', filename)
