@@ -37,7 +37,7 @@ def menu():
             g.play(cdn('/DS3.wav'))
             g.play(cdn('/DS4.wav'))
             r.say('I could not hear you. Try again.', voice='man')
-        r.say('Goodbye')
+        r.say('Goodbye', voice='man')
     return str(r)
 
 @mod.route('/zipcode', methods=['POST'])
@@ -54,14 +54,14 @@ def zipcode():
                 r.play(cdn('/DS9.wav'))
                 r.redirect()
             else:
-                r.say('Please wait while we retrieve your representatives')
+                r.say('Please wait while we retrieve your representatives', voice='man')
                 r.redirect('/call/legislators/%s' % digits)
     else:
         for i in range(3):
             g = r.gather(numDigits=5)
             g.play(cdn('/DS6.wav'))
             r.say('I could not hear you. Try again.', voice='man')
-        r.say('Goodbye')
+        r.say('Goodbye', voice='man')
     return str(r)
 
 @mod.route('/legislators/<string:zipcode>', methods=['POST'])
@@ -76,18 +76,18 @@ def legislators(zipcode):
             if legislators:
                 try:
                     index = int(digits) - 1
-                    name = re.sub(' +', ' ', '%s %s %s' % (l.get('firstname'), l.get('middlename'), l.get('lastname')))
-                    legislator = legislators[index]
+                    l = legislators[index]
                 except TypeError, IndexError:
                     r.say('I did not recognize that option. Try again.', voice='man')
                     r.redirect()
                 else:
-                    legislator_phone = legislator.get('phone')
+                    name = re.sub(' +', ' ', '%s %s %s' % (l.get('firstname'), l.get('middlename'), l.get('lastname')))
+                    legislator_phone = l.get('phone')
                     if legislator_phone:
-                        r.say('Dialing %s' % name)
+                        r.say('Dialing %s' % name, voice='man')
                         r.dial(legislator_phone)
                     else:
-                        r.say('This legislator does not have a phone number on file.')
+                        r.say('The legislator you chose does not have a phone number on file.', voice='man')
             else:
                 r.redirect()
     else:
@@ -101,11 +101,11 @@ def legislators(zipcode):
                     name = re.sub(' +', ' ', '%s %s %s' % (l.get('firstname'), l.get('middlename'), l.get('lastname')))
                     title = l.get('title')
                     if title == 'Sen':
-                        g.say('Press %s to call Senator %s' % (j + 1, name))
+                        g.say('Press %s to call Senator %s' % (j + 1, name), voice='man')
                     elif title == 'Rep':
-                        g.say('Press %s to call Represenative %s' % (j + 1, name))
+                        g.say('Press %s to call Represenative %s' % (j + 1, name), voice='man')
                     else:
-                        g.say('Press %s to call %s' % (j + 1, name))
+                        g.say('Press %s to call %s' % (j + 1, name), voice='man')
                 r.say('I could not hear you. Try again.', voice='man')
             r.say('Goodbye.')
         else:
