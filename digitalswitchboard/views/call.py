@@ -25,8 +25,7 @@ def menu():
         if digits == '1':
             r.redirect('/call/zipcode')
         elif digits == '2':
-            r.play(cdn('/DS5.wav'))
-            r.redirect()
+            r.redirect('/call/info')
         elif digits == '9':
             r.redirect()
         else:
@@ -38,8 +37,18 @@ def menu():
             g.play(cdn('/DS2.wav'))
             g.play(cdn('/DS3.wav'))
             g.play(cdn('/DS4.wav'))
-            r.say('I could not hear your repsonse.', voice='man')
+            r.say('I could not hear your response.', voice='man')
         r.say('Goodbye', voice='man')
+    return str(r)
+
+@mod.route('/info', methods=['POST'])
+def info():
+    r = twiml.Response()
+    digits = request.form.get('Digits')
+    if digits:
+        r.redirect('/menu')
+    else:
+        r.play(cdn('/DS5.wav'))
     return str(r)
 
 @mod.route('/zipcode', methods=['POST'])
