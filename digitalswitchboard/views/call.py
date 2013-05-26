@@ -13,7 +13,7 @@ def index():
     g.play(cdn('/DS2.wav'))
     g.play(cdn('/DS3.wav'))
     g.play(cdn('/DS4.wav'))
-    r.say('I couldn not hear you.', voice='man')
+    r.say('I couldn not hear your response.', voice='man')
     r.redirect('/call/menu')
     return str(r)
 
@@ -38,7 +38,7 @@ def menu():
             g.play(cdn('/DS2.wav'))
             g.play(cdn('/DS3.wav'))
             g.play(cdn('/DS4.wav'))
-            r.say('I could not hear you. Try again.', voice='man')
+            r.say('I could not hear your repsonse.', voice='man')
         r.say('Goodbye', voice='man')
     return str(r)
 
@@ -62,7 +62,7 @@ def zipcode():
         for i in range(3):
             g = r.gather(numDigits=5)
             g.play(cdn('/DS6.wav'))
-            r.say('I could not hear you. Try again.', voice='man')
+            r.say('I could not hear your response.', voice='man')
         r.say('Goodbye', voice='man')
     return str(r)
 
@@ -108,7 +108,7 @@ def legislators(zipcode):
                         g.say('Press %s to call Represenative %s' % (j + 1, name), voice='man')
                     else:
                         g.say('Press %s to call %s' % (j + 1, name), voice='man')
-                r.say('I could not hear you. Try again.', voice='man')
+                r.say('I could not hear your response.', voice='man')
             r.say('Goodbye.')
         else:
             r.play(cdn('/DS7.wav'))
