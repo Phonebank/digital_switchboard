@@ -1,3 +1,4 @@
+import re
 from flask import Blueprint, request, session
 from twilio import twiml
 from digitalswitchboard import cdn, congress
@@ -74,31 +75,37 @@ def legislators(zipcode):
             legislators = session.get('legislators')
             if legislators:
                 try:
-                    index = int(digits)
-                    legislators[digits]
+                    index = int(digits) - 1
+                    name = re.sub(' +', ' ', '%s %s %s' % (l.get('firstname'), l.get('middlename'), l.get('lastname')))
+                    legislator = legislators[index]
                 except TypeError, IndexError:
                     r.say('I did not recognize that option. Try again.', voice='man')
                     r.redirect()
                 else:
-                    r.say('Dialing')
+                    legislator_phone = legislator.get('phone')
+                    if legislator_phone:
+                        r.say('Dialing %s' % name)
+                        r.dial(legislator_phone)
+                    else:
+                        r.say('This legislator does not have a phone number on file.')
             else:
                 r.redirect()
     else:
-        session['legislators'] = congress.legislators_by_zip(zipcode)
-        if legislators:
+        session['legislators'] = congress.legislators_for_zip(zipcode)
+        if session['legislators']:
             for i in range(3):
                 g = r.gather(numDigits=1)
-                for j, l in enumerate(legislators):
+                for j, l in enumerate(session['legislators']):
                     if j > 9:
                         break
-                    name = '%s %s %s' % (l.get('firstname'), l.get('middlename'), l.get('lastname'))
+                    name = re.sub(' +', ' ', '%s %s %s' % (l.get('firstname'), l.get('middlename'), l.get('lastname')))
                     title = l.get('title')
                     if title == 'Sen':
-                        g.say('Press %s for Senator %s' % (j + 1, name))
+                        g.say('Press %s to call Senator %s' % (j + 1, name))
                     elif title == 'Rep':
-                        g.say('Press %s for Represenative %s' % (j + 1, name))
+                        g.say('Press %s to call Represenative %s' % (j + 1, name))
                     else:
-                        g.say('Press %s for %s' % (j + 1, name))
+                        g.say('Press %s to call %s' % (j + 1, name))
                 r.say('I could not hear you. Try again.', voice='man')
             r.say('Goodbye.')
         else:
