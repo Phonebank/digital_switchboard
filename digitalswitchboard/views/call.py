@@ -79,7 +79,7 @@ def legislators(zipcode):
                 try:
                     index = int(digits) - 1
                     l = legislators[index]
-                except TypeError, IndexError:
+                except (TypeError, IndexError):
                     r.say('I did not recognize that option. Try again.', voice='man')
                     r.redirect()
                 else:
