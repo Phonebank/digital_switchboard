@@ -1,4 +1,4 @@
 # Twilio API credentials are stored in the system environment.
-# Set TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN
+# Set TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN there, the Twilio Python helper will use them automatically.
 
-SUNLIGHT_URL_ZIPCODE = 'http://calloncongress.sunlightfoundation.com/voice/voting/call/?language=en&zipcode=%s&next_url=https://digital-switchboard.herokuapp.com/call/zipcode-callback'
+STATIC_URL_PATH = 'https://d3gty3dyeu0x0z.cloudfront.net'
