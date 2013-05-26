@@ -28,10 +28,11 @@ def menu():
             r.say('Sorry, I did not recognize that option.', voice='man')
     else:
         g = r.gather(numDigits=1)
-        g.play(cdn('/DS2.wav'))
-        g.play(cdn('/DS3.wav'))
-        g.play(cdn('/DS4.wav'))
-        r.redirect()
+        for i in range(3):
+            g.play(cdn('/DS2.wav'))
+            g.play(cdn('/DS3.wav'))
+            g.play(cdn('/DS4.wav'))
+        r.say('Goodbye')
     return str(r)
 
 @mod.route('/zipcode', methods=['POST'])
@@ -48,7 +49,9 @@ def zipcode():
             r.redirect(SUNLIGHT_ZIPCODE % digits)
     else:
         g = r.gather(numDigits=5)
-        g.play(cdn('/DS6.wav'))
+        for i in range(3):
+            g.play(cdn('/DS6.wav'))
+        r.say('Goodbye')
     return str(r)
 
 @mod.route('/zipcode-callback', methods=['POST'])
