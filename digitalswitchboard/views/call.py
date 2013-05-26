@@ -1,10 +1,8 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, session
 from twilio import twiml
-from digitalswitchboard import cdn
+from digitalswitchboard import cdn, congress
 
 mod = Blueprint('call', __name__)
-
-SUNLIGHT_ZIPCODE = 'http://calloncongress.sunlightfoundation.com/voice/voting/call/?language=en&zipcode=%s&next_url=https://digital-switchboard.herokuapp.com/call/zipcode-callback'
 
 @mod.route('/', methods=['POST'])
 def index():
@@ -45,13 +43,17 @@ def zipcode():
     r = twiml.Response()
     digits = request.form.get('Digits')
     if digits:
-        if len(digits) < 5:
-            r.play(cdn('/DS7.wav'))
-            r.say(digits, voice='man')
-            r.play(cdn('/DS9.wav'))
-            r.redirect()
+        if digits == '9':
+            r.redirect('/menu')
         else:
-            r.redirect(SUNLIGHT_ZIPCODE % digits)
+            if len(digits) < 5:
+                r.play(cdn('/DS7.wav'))
+                r.say(digits, voice='man')
+                r.play(cdn('/DS9.wav'))
+                r.redirect()
+            else:
+                r.say('Please wait while we retrieve your representatives')
+                r.redirect('/legislators')
     else:
         g = r.gather(numDigits=5)
         for i in range(3):
@@ -60,8 +62,43 @@ def zipcode():
         r.say('Goodbye')
     return str(r)
 
-@mod.route('/zipcode-callback', methods=['POST'])
-def zipcode_callback():
+@mod.route('/legislators/<string:zipcode>', methods=['POST'])
+def legislators(zipcode):
     r = twiml.Response()
-    r.say('Done')
+    digits = request.form.get('Digits')
+    if digits:
+        if digits == '9':
+            r.redirect('/zipcode')
+        else: 
+            legislators = session.get('legislators')
+            if legislators:
+                try:
+                    index = int(digits)
+                    legislators[digits]
+                except TypeError, IndexError:
+                    r.say('I did not recognize that option. Try again.', voice='man')
+                    r.redirect()
+                else:
+                    r.say('Dialing')
+            else:
+                r.redirect()
+    else:
+        session['legislators'] = congress.legislators_by_zip(zipcode)
+        if legislators:
+            g = r.gather(numDigits=1)
+            for i, l in enumerate(legislators):
+                if i > 9:
+                    break
+                name = '%s %s %s' % (l.get('firstname'), l.get('middlename'), l.get('lastname'))
+                title = l.get('title')
+                if title == 'Sen':
+                    g.say('Press %s for Senator %s' % (i + 1, name))
+                elif title == 'Rep':
+                    g.say('Press %s for Represenative %s' % (i + 1, name))
+                else:
+                    g.say('Press %s for %s' % (i + 1, name))
+        else:
+            r.play(cdn('/DS7.wav'))
+            r.say(zipcode, voice='man')
+            r.redirect('/zipcode')
     return str(r)

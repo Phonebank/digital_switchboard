@@ -1,12 +1,16 @@
 from flask import Flask, send_from_directory
-from twilio.rest import TwilioRestClient
 
 app = Flask(__name__)
 app.config.from_object('digitalswitchboard.config')
 
 # Twilio
 
+from twilio.rest import TwilioRestClient
 twilio = TwilioRestClient()
+
+# Sunlight Congress
+
+from sunlight import congress
 
 # Helpers
 
