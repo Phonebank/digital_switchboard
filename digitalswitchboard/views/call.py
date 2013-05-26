@@ -9,6 +9,14 @@ SUNLIGHT_ZIPCODE = 'http://calloncongress.sunlightfoundation.com/voice/voting/ca
 @mod.route('/', methods=['POST'])
 def index():
     r = twiml.Response()
+    g = r.gather(numDigits=1, action='/menu')
+    g.play(cdn('/DS1.wav'))
+    r.redirect('/menu')
+    return str(r)
+
+@mod.route('/menu', methods=['POST'])
+def menu():
+    r = twiml.Response()
     digits = request.form.get('Digits')
     if digits:
         if digits == '1':
@@ -17,13 +25,13 @@ def index():
             r.play(cdn('/DS5.wav'))
             r.redirect()
         else:
-            r.say('Sorry, I did not recognize that option.')
+            r.say('Sorry, I did not recognize that option.', voice='man')
     else:
         g = r.gather(numDigits=1)
-        g.play(cdn('/DS1.wav'))
         g.play(cdn('/DS2.wav'))
         g.play(cdn('/DS3.wav'))
         g.play(cdn('/DS4.wav'))
+        r.redirect()
     return str(r)
 
 @mod.route('/zipcode', methods=['POST'])
