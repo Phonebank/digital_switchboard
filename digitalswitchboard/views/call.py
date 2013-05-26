@@ -45,7 +45,7 @@ def zipcode():
             r.play(cdn('/DS9.wav'))
             r.redirect()
         else:
-            r.redirect(settings.SUNLIGHT_ZIPCODE % digits)
+            r.redirect(SUNLIGHT_ZIPCODE % digits)
     else:
         g = r.gather(numDigits=5)
         g.play(cdn('/DS6.wav'))
