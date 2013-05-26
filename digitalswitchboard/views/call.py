@@ -32,6 +32,7 @@ def menu():
             g.play(cdn('/DS2.wav'))
             g.play(cdn('/DS3.wav'))
             g.play(cdn('/DS4.wav'))
+            r.say('Sorry, I did not hear you.', voice='man')
         r.say('Goodbye')
     return str(r)
 
@@ -51,6 +52,7 @@ def zipcode():
         g = r.gather(numDigits=5)
         for i in range(3):
             g.play(cdn('/DS6.wav'))
+            r.say('Sorry, I did not hear you.', voice='man')
         r.say('Goodbye')
     return str(r)
 
