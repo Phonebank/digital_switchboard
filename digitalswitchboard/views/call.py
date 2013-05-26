@@ -12,6 +12,7 @@ def index():
     g.play(cdn('/DS2.wav'))
     g.play(cdn('/DS3.wav'))
     g.play(cdn('/DS4.wav'))
+    r.say('I couldn not hear you.', voice='man')
     r.redirect('/call/menu')
     return str(r)
 
@@ -34,7 +35,7 @@ def menu():
             g.play(cdn('/DS2.wav'))
             g.play(cdn('/DS3.wav'))
             g.play(cdn('/DS4.wav'))
-            r.say('Sorry, I did not hear you.', voice='man')
+            r.say('I could not hear you. Try again.', voice='man')
         r.say('Goodbye')
     return str(r)
 
@@ -58,7 +59,7 @@ def zipcode():
         g = r.gather(numDigits=5)
         for i in range(3):
             g.play(cdn('/DS6.wav'))
-            r.say('Sorry, I did not hear you.', voice='man')
+            r.say('I could not hear you. Try again.', voice='man')
         r.say('Goodbye')
     return str(r)
 
@@ -86,17 +87,20 @@ def legislators(zipcode):
         session['legislators'] = congress.legislators_by_zip(zipcode)
         if legislators:
             g = r.gather(numDigits=1)
-            for i, l in enumerate(legislators):
-                if i > 9:
-                    break
-                name = '%s %s %s' % (l.get('firstname'), l.get('middlename'), l.get('lastname'))
-                title = l.get('title')
-                if title == 'Sen':
-                    g.say('Press %s for Senator %s' % (i + 1, name))
-                elif title == 'Rep':
-                    g.say('Press %s for Represenative %s' % (i + 1, name))
-                else:
-                    g.say('Press %s for %s' % (i + 1, name))
+            for i in range(3):
+                for j, l in enumerate(legislators):
+                    if j > 9:
+                        break
+                    name = '%s %s %s' % (l.get('firstname'), l.get('middlename'), l.get('lastname'))
+                    title = l.get('title')
+                    if title == 'Sen':
+                        g.say('Press %s for Senator %s' % (j + 1, name))
+                    elif title == 'Rep':
+                        g.say('Press %s for Represenative %s' % (j + 1, name))
+                    else:
+                        g.say('Press %s for %s' % (j + 1, name))
+                 r.say('I could not hear you. Try again.', voice='man')
+            r.say('Goodbye.')
         else:
             r.play(cdn('/DS7.wav'))
             r.say(zipcode, voice='man')
