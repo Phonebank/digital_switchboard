@@ -55,7 +55,7 @@ def zipcode():
                 r.redirect()
             else:
                 r.say('Please wait while we retrieve your representatives')
-                r.redirect('/legislators')
+                r.redirect('/legislators/%s' % digits)
     else:
         for i in range(3):
             g = r.gather(numDigits=5)
