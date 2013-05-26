@@ -30,8 +30,8 @@ def menu():
             r.say('I did not recognize that option.', voice='man')
             r.redirect()
     else:
-        g = r.gather(numDigits=1)
         for i in range(3):
+            g = r.gather(numDigits=1)
             g.play(cdn('/DS2.wav'))
             g.play(cdn('/DS3.wav'))
             g.play(cdn('/DS4.wav'))
@@ -56,8 +56,8 @@ def zipcode():
                 r.say('Please wait while we retrieve your representatives')
                 r.redirect('/legislators')
     else:
-        g = r.gather(numDigits=5)
         for i in range(3):
+            g = r.gather(numDigits=5)
             g.play(cdn('/DS6.wav'))
             r.say('I could not hear you. Try again.', voice='man')
         r.say('Goodbye')
@@ -86,8 +86,8 @@ def legislators(zipcode):
     else:
         session['legislators'] = congress.legislators_by_zip(zipcode)
         if legislators:
-            g = r.gather(numDigits=1)
             for i in range(3):
+                g = r.gather(numDigits=1)
                 for j, l in enumerate(legislators):
                     if j > 9:
                         break
