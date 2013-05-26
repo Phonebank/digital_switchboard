@@ -99,7 +99,7 @@ def legislators(zipcode):
                         g.say('Press %s for Represenative %s' % (j + 1, name))
                     else:
                         g.say('Press %s for %s' % (j + 1, name))
-                 r.say('I could not hear you. Try again.', voice='man')
+                r.say('I could not hear you. Try again.', voice='man')
             r.say('Goodbye.')
         else:
             r.play(cdn('/DS7.wav'))
