@@ -48,7 +48,9 @@ def info():
     if digits:
         r.redirect('/menu')
     else:
-        r.play(cdn('/DS5.wav'))
+        g = r.gather(numDigits=1)
+        g.play(cdn('/DS5.wav'))
+        r.redirect('/menu')
     return str(r)
 
 @mod.route('/zipcode', methods=['POST'])
