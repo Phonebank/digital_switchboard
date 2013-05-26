@@ -27,6 +27,8 @@ def menu():
         elif digits == '2':
             r.play(cdn('/DS5.wav'))
             r.redirect()
+        elif digits == '9':
+            r.redirect()
         else:
             r.say('I did not recognize that option.', voice='man')
             r.redirect()
