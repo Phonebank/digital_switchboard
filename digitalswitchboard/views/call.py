@@ -9,9 +9,9 @@ SUNLIGHT_ZIPCODE = 'http://calloncongress.sunlightfoundation.com/voice/voting/ca
 @mod.route('/', methods=['POST'])
 def index():
     r = twiml.Response()
-    g = r.gather(numDigits=1, action='/menu')
+    g = r.gather(numDigits=1, action='/call/menu')
     g.play(cdn('/DS1.wav'))
-    r.redirect('/menu')
+    r.redirect('/call/menu')
     return str(r)
 
 @mod.route('/menu', methods=['POST'])
