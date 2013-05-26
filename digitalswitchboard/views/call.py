@@ -11,6 +11,9 @@ def index():
     r = twiml.Response()
     g = r.gather(numDigits=1, action='/call/menu')
     g.play(cdn('/DS1.wav'))
+    g.play(cdn('/DS2.wav'))
+    g.play(cdn('/DS3.wav'))
+    g.play(cdn('/DS4.wav'))
     r.redirect('/call/menu')
     return str(r)
 
@@ -25,7 +28,8 @@ def menu():
             r.play(cdn('/DS5.wav'))
             r.redirect()
         else:
-            r.say('Sorry, I did not recognize that option.', voice='man')
+            r.say('I did not recognize that option.', voice='man')
+            r.redirect()
     else:
         g = r.gather(numDigits=1)
         for i in range(3):
