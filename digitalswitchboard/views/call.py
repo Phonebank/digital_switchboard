@@ -50,7 +50,7 @@ def info():
     else:
         g = r.gather(numDigits=1)
         g.play(cdn('/DS5.wav'))
-        r.redirect('/menu')
+        r.redirect('/call/menu')
     return str(r)
 
 @mod.route('/zipcode', methods=['POST'])
