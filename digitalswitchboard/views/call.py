@@ -115,14 +115,11 @@ def legislators(zipcode):
                     name = re.sub(' +', ' ', '%s %s %s' % (l.get('firstname'), l.get('middlename'), l.get('lastname')))
                     title = l.get('title')
                     if title == 'Sen':
-                        g.play(cdn('/DS%d' % (j + 20)))
+                        g.play(cdn('/DS%d.wav' % (j + 20)))
                         g.say(name)
                     elif title == 'Rep':
-                        g.play(cdn('/DS%d' % (j + 30)))
+                        g.play(cdn('/DS%d.wav' % (j + 30)))
                         g.say(name)
-                    else:
-                        # In case the API didn't return a title
-                        g.say('Press %s to call %s' % (j + 1, name), voice='man')
                 r.play(cdn('/DS43.wav'))
             r.play(cdn('/DS39.wav'))
         else:
