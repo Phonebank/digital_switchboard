@@ -13,7 +13,7 @@ def index():
     g.play(cdn('/DS2.wav'))
     g.play(cdn('/DS3.wav'))
     g.play(cdn('/DS4.wav'))
-    r.say('I couldn not hear your response.', voice='man')
+    r.play(cdn('/DS43.wav'))
     r.redirect('/call/menu')
     return str(r)
 
@@ -29,7 +29,7 @@ def menu():
         elif digits == '9':
             r.redirect()
         else:
-            r.say('I did not recognize that option.', voice='man')
+            r.play(cdn('/DS40.wav'))
             r.redirect()
     else:
         for i in range(3):
@@ -37,8 +37,8 @@ def menu():
             g.play(cdn('/DS2.wav'))
             g.play(cdn('/DS3.wav'))
             g.play(cdn('/DS4.wav'))
-            r.say('I could not hear your response.', voice='man')
-        r.say('Goodbye', voice='man')
+            r.play(cdn('/DS43.wav'))
+        r.play(cdn('/DS39.wav'))
     return str(r)
 
 @mod.route('/info', methods=['POST'])
@@ -63,18 +63,19 @@ def zipcode():
         else:
             if len(digits) < 5:
                 r.play(cdn('/DS7.wav'))
+                # ZIP CODE DIGITS
                 r.say(digits, voice='man')
                 r.play(cdn('/DS9.wav'))
                 r.redirect()
             else:
-                r.say('Please wait while we retrieve your representatives', voice='man')
+                r.play(cdn('/DS41.wav'))
                 r.redirect('/call/legislators/%s' % digits)
     else:
         for i in range(3):
             g = r.gather(numDigits=5)
             g.play(cdn('/DS6.wav'))
-            r.say('I could not hear your response.', voice='man')
-        r.say('Goodbye', voice='man')
+            r.play(cdn('/DS43.wav'))
+        r.play(cdn('/DS39.wav'))
     return str(r)
 
 @mod.route('/legislators/<string:zipcode>', methods=['POST'])
@@ -91,16 +92,16 @@ def legislators(zipcode):
                     index = int(digits) - 1
                     l = legislators[index]
                 except (TypeError, IndexError):
-                    r.say('I did not recognize that option. Try again.', voice='man')
+                    r.play(cdn('/DS40.wav'))
                     r.redirect()
                 else:
                     name = re.sub(' +', ' ', '%s %s %s' % (l.get('firstname'), l.get('middlename'), l.get('lastname')))
                     legislator_phone = l.get('phone')
                     if legislator_phone:
-                        r.say('Dialing %s' % name, voice='man')
+                        r.play(cdn('/DS44.wav'))
                         r.dial(legislator_phone)
                     else:
-                        r.say('The legislator you chose does not have a phone number on file.', voice='man')
+                        r.play(cdn('/DS42.wav'))
             else:
                 r.redirect()
     else:
@@ -114,15 +115,19 @@ def legislators(zipcode):
                     name = re.sub(' +', ' ', '%s %s %s' % (l.get('firstname'), l.get('middlename'), l.get('lastname')))
                     title = l.get('title')
                     if title == 'Sen':
-                        g.say('Press %s to call Senator %s' % (j + 1, name), voice='man')
+                        g.play(cdn('/DS%d' % (j + 20)))
+                        g.say(name)
                     elif title == 'Rep':
-                        g.say('Press %s to call Represenative %s' % (j + 1, name), voice='man')
+                        g.play(cdn('/DS%d' % (j + 30)))
+                        g.say(name)
                     else:
+                        # In case the API didn't return a title
                         g.say('Press %s to call %s' % (j + 1, name), voice='man')
-                r.say('I could not hear your response.', voice='man')
-            r.say('Goodbye.')
+                r.play(cdn('/DS43.wav'))
+            r.play(cdn('/DS39.wav'))
         else:
             r.play(cdn('/DS7.wav'))
+            # ZIP CODE
             r.say(zipcode, voice='man')
             r.redirect('/zipcode')
     return str(r)
