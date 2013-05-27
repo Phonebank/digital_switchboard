@@ -59,7 +59,7 @@ def zipcode():
     digits = request.form.get('Digits')
     if digits:
         if digits == '9':
-            r.redirect('/menu')
+            r.redirect('/call/menu')
         else:
             if len(digits) < 5:
                 r.play(cdn('/DS7.wav'))
