@@ -84,7 +84,7 @@ def legislators(zipcode):
     digits = request.form.get('Digits')
     if digits:
         if digits == '9':
-            r.redirect('/zipcode')
+            r.redirect('/call/zipcode')
         else: 
             legislators = session.get('legislators')
             if legislators:
