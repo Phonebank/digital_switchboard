@@ -63,7 +63,7 @@ def zipcode():
         else:
             if len(digits) < 5:
                 r.play(cdn('/DS7.wav'))
-                for digit in ' '.join(zipcode).split():
+                for digit in ' '.join(digits).split():
                     r.play('DS%d.wav' % (int(digit) + 44))
                 r.play(cdn('/DS9.wav'))
                 r.redirect()
