@@ -64,7 +64,7 @@ def zipcode():
             if len(digits) < 5:
                 r.play(cdn('/DS7.wav'))
                 for digit in ' '.join(digits).split():
-                    r.play(cdn('/DS%d.wav' % (int(digit) + 44)))
+                    r.play(cdn('/DS%d.wav' % (int(digit) + 45)))
                 r.play(cdn('/DS9.wav'))
                 r.redirect()
             else:
@@ -125,6 +125,6 @@ def legislators(zipcode):
         else:
             r.play(cdn('/DS7.wav'))
             for digit in ' '.join(zipcode).split():
-                r.play(cdn('/DS%d.wav' % (int(digit) + 44)))
+                r.play(cdn('/DS%d.wav' % (int(digit) + 45)))
             r.redirect('/call/zipcode')
     return str(r)
