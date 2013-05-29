@@ -9,11 +9,11 @@ mod = Blueprint('call', __name__)
 def index():
     r = twiml.Response()
     g = r.gather(numDigits=1, action='/call/menu')
-    g.play(cdn('/DS1.wav'))
-    g.play(cdn('/DS2.wav'))
-    g.play(cdn('/DS3.wav'))
-    g.play(cdn('/DS4.wav'))
-    r.play(cdn('/DS43.wav'))
+    g.play(cdn('/DS1.mp3'))
+    g.play(cdn('/DS2.mp3'))
+    g.play(cdn('/DS3.mp3'))
+    g.play(cdn('/DS4.mp3'))
+    r.play(cdn('/DS43.mp3'))
     r.redirect('/call/menu')
     return str(r)
 
@@ -29,16 +29,16 @@ def menu():
         elif digits == '9':
             r.redirect()
         else:
-            r.play(cdn('/DS40.wav'))
+            r.play(cdn('/DS40.mp3'))
             r.redirect()
     else:
         for i in range(3):
             g = r.gather(numDigits=1)
-            g.play(cdn('/DS2.wav'))
-            g.play(cdn('/DS3.wav'))
-            g.play(cdn('/DS4.wav'))
-            r.play(cdn('/DS43.wav'))
-        r.play(cdn('/DS39.wav'))
+            g.play(cdn('/DS2.mp3'))
+            g.play(cdn('/DS3.mp3'))
+            g.play(cdn('/DS4.mp3'))
+            r.play(cdn('/DS43.mp3'))
+        r.play(cdn('/DS39.mp3'))
     return str(r)
 
 @mod.route('/info', methods=['POST'])
@@ -49,7 +49,7 @@ def info():
         r.redirect('/call/menu')
     else:
         g = r.gather(numDigits=1)
-        g.play(cdn('/DS5.wav'))
+        g.play(cdn('/DS5.mp3'))
         r.redirect('/call/menu')
     return str(r)
 
@@ -62,20 +62,20 @@ def zipcode():
             r.redirect('/call/menu')
         else:
             if len(digits) < 5:
-                r.play(cdn('/DS7.wav'))
+                r.play(cdn('/DS7.mp3'))
                 for digit in ' '.join(digits).split():
-                    r.play(cdn('/DS%d.wav' % (int(digit) + 45)))
-                r.play(cdn('/DS9.wav'))
+                    r.play(cdn('/DS%d.mp3' % (int(digit) + 45)))
+                r.play(cdn('/DS9.mp3'))
                 r.redirect()
             else:
-                r.play(cdn('/DS41.wav'))
+                r.play(cdn('/DS41.mp3'))
                 r.redirect('/call/legislators/%s' % digits)
     else:
         for i in range(3):
             g = r.gather(numDigits=5)
-            g.play(cdn('/DS6.wav'))
-            r.play(cdn('/DS43.wav'))
-        r.play(cdn('/DS39.wav'))
+            g.play(cdn('/DS6.mp3'))
+            r.play(cdn('/DS43.mp3'))
+        r.play(cdn('/DS39.mp3'))
     return str(r)
 
 @mod.route('/legislators/<string:zipcode>', methods=['POST'])
@@ -92,16 +92,16 @@ def legislators(zipcode):
                     index = int(digits) - 1
                     l = legislators[index]
                 except (TypeError, IndexError):
-                    r.play(cdn('/DS40.wav'))
+                    r.play(cdn('/DS40.mp3'))
                     r.redirect()
                 else:
                     name = re.sub(' +', ' ', '%s %s %s' % (l.get('firstname'), l.get('middlename'), l.get('lastname')))
                     legislator_phone = l.get('phone')
                     if legislator_phone:
-                        r.play(cdn('/DS44.wav'))
+                        r.play(cdn('/DS44.mp3'))
                         r.dial(legislator_phone)
                     else:
-                        r.play(cdn('/DS42.wav'))
+                        r.play(cdn('/DS42.mp3'))
             else:
                 r.redirect()
     else:
@@ -115,16 +115,16 @@ def legislators(zipcode):
                     name = re.sub(' +', ' ', '%s %s %s' % (l.get('firstname'), l.get('middlename'), l.get('lastname')))
                     title = l.get('title')
                     if title == 'Sen':
-                        g.play(cdn('/DS%d.wav' % (j + 20)))
+                        g.play(cdn('/DS%d.mp3' % (j + 20)))
                         g.say(name)
                     elif title == 'Rep':
-                        g.play(cdn('/DS%d.wav' % (j + 30)))
+                        g.play(cdn('/DS%d.mp3' % (j + 30)))
                         g.say(name)
-                r.play(cdn('/DS43.wav'))
-            r.play(cdn('/DS39.wav'))
+                r.play(cdn('/DS43.mp3'))
+            r.play(cdn('/DS39.mp3'))
         else:
-            r.play(cdn('/DS7.wav'))
+            r.play(cdn('/DS7.mp3'))
             for digit in ' '.join(zipcode).split():
-                r.play(cdn('/DS%d.wav' % (int(digit) + 45)))
+                r.play(cdn('/DS%d.mp3' % (int(digit) + 45)))
             r.redirect('/call/zipcode')
     return str(r)
